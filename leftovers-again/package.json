@@ -1,0 +1,43 @@
+{
+  "name": "leftovers-again",
+  "version": "0.0.0",
+  "description": "Pure Hackmons No Nerfs Bot",
+  "main": "src/bot.js",
+  "files": [
+    "src",
+    "spec",
+    "templates",
+    "scripts",
+    "CONTRIBUTING.md",
+    "README.md",
+    "FAQ.md"
+  ],
+  "scripts": {
+    "develop": "nodemon src/app.js",
+    "start": "node src/app.js",
+    "server": "cd Pokemon-Showdown && npm start"
+  },
+  "_moduleAliases": {
+    "leftovers-again": "src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dramamine/leftovers-again.git"
+  },
+  "bugs": "https://github.com/dramamine/leftovers-again/issues",
+  "keywords": [
+    "pokemon"
+  ],
+  "author": "marten",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "leftovers-again": "^0.11.*"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  },
+  "engine": "node >= 6.0.0",
+  "format": "gen9purehackmonsnonerfs",
+  "accepts": "ALL",
+  "nickname": "PHNNBot"
+}
