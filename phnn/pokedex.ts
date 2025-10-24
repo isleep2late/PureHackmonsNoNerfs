@@ -282,6 +282,24 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 92, atk: 130, def: 145, spa: 80, spd: 145, spe: 128}, // Atk 120 → 130, Def & SpDef 140 → 145
 	},
+
+		// Legends ZA Mega Evolution Stats
+	meditite: {
+		inherit: true,
+		baseStats: {hp: 30, atk: 56, def: 55, spa: 40, spd: 55, spe: 60}, // Atk 40 → 56 (Legends ZA)
+	},
+	medicham: {
+		inherit: true,
+		baseStats: {hp: 60, atk: 84, def: 75, spa: 60, spd: 75, spe: 80}, // Atk 60 → 84 (Legends ZA)
+	},
+	mawilemega: {
+		inherit: true,
+		baseStats: {hp: 50, atk: 147, def: 125, spa: 55, spd: 95, spe: 50}, // Atk 105 → 147 (Legends ZA)
+	},
+	medichammega: {
+		inherit: true,
+		baseStats: {hp: 60, atk: 140, def: 85, spa: 80, spd: 85, spe: 100}, // Atk 100 → 140 (Legends ZA)
+	},
 	
 	// Treasures of Ruin (Pre-Update)
 	chienpao: {
