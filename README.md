@@ -353,6 +353,12 @@ The Gen 1 Special stat was split into Special Attack and Special Defense in Gen 
 - **PokéStar Studio Pokémon** (All 600 BST / Gen 5): Black Belt, Black Door, Brycen-Man, F-00, Humanoid, Majin, MT, MT2, Monica, Monster, Transport, UFO, UFO 2, White Door
 - **Eternatus-Eternamax** (Gen 8) 🌟
 
+**Legends Z-A Stats to account for Huge Power / Pure Power**
+- **Meditite**: 56 Atk
+- **Medicham**: 84 Atk
+- **Mega Medicham**: 140 Atk
+- **Mega Mawile**: 147 Atk
+
 > Mega-Zygarde (from Legends Z-A) as well as all additional Z-A Megas are now available on Showdown.
 
 ---
