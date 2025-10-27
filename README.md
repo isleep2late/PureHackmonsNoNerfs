@@ -398,7 +398,7 @@ The Gen 1 Special stat was split into Special Attack and Special Defense in Gen 
 - **King's Shield**: → -2 Atk if attacker makes contact
 - **Leech Seed + Toxic**: Synergy from RBY returns (stacking damage!)
 - **Amnesia**: Raises user's Special Defense AND Special Attack by two stages
-- **Seismic Toss/Night Shade/SonicBoom/Counter/Bide**: Hits Ghost/Normal/Psychic types
+- **Seismic Toss/Night Shade/Super Fang/SonicBoom/Counter/Bide**: Hits Ghost/Normal/Psychic types
 - **Multi-hit moves** (Double Kick, Barrage, Fury Attack, Pin Missile, etc.): Each hit always deals the same damage; subsequent hits will crit if the 1st one did, BUT ends immediately if it breaks a substitute (Gen 1)
 - **Bind/Wrap/Clamp/Fire Spin**: Lasting 2-5 turns, dealing regular 15 BP damage, target unable to attack/switch (Gen 1)
 - **Swift/Bide**: Hits during invulnerable Dig/Fly
