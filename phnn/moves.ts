@@ -426,6 +426,10 @@ export const Moves: {[moveid: string]: ModdedMoveData} = {
 			return this.randomChance(1, 1);
 		},
 	},
+	superfang: {
+	inherit: true,
+	ignoreImmunity: {'Normal': true}, // Allows Super Fang to hit Ghost-types like in Gen 1
+	},
 	
 	// Priority Changes
 	roar: {
