@@ -300,6 +300,10 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 60, atk: 140, def: 85, spa: 80, spd: 85, spe: 100}, // Atk 100 → 140 (Legends ZA)
 	},
+	cherrimsunshine: {
+	inherit: true,
+	baseStats: {hp: 70, atk: 90, def: 70, spa: 87, spd: 117, spe: 85}, // Atk 60 → 90, SpDef 78 → 117 (Legends ZA)
+	},
 	
 	// Treasures of Ruin (Pre-Update)
 	chienpao: {
