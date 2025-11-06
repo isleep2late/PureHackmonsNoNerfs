@@ -358,6 +358,7 @@ The Gen 1 Special stat was split into Special Attack and Special Defense in Gen 
 - **Medicham**: 84 Atk
 - **Mega Medicham**: 140 Atk
 - **Mega Mawile**: 147 Atk
+- **Cherrim Sunshine**: 90 Atk and 117 SpDef
 
 > Mega-Zygarde (from Legends Z-A) as well as all additional Z-A Megas are now available on Showdown.
 
