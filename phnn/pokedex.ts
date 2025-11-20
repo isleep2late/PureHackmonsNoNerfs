@@ -304,15 +304,39 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 	inherit: true,
 	baseStats: {hp: 70, atk: 90, def: 70, spa: 87, spd: 117, spe: 85}, // Atk 60 → 90, SpDef 78 → 117 (Legends ZA)
 	},
+	darkrai: {
+		inherit: true,
+		otherFormes: ["Darkrai-Mega"],
+		formeOrder: ["Darkrai", "Darkrai-Mega"],
+	},
 	darkraimega: {
+		num: 491,
+		name: "Darkrai-Mega",
+		types: ["Dark"],
 		inherit: true,
 		baseStats: {hp: 70, atk: 120, def: 130, spa: 165, spd: 130, spe: 85},
 	},
+	zeraora: {
+		inherit: true,
+		otherFormes: ["Zeraora-Mega"],
+		formeOrder: ["Zeraora", "Zeraora-Mega"],
+	},
 	zeraoramega: {
+		num: 807,
+		name: "Zeraora-Mega",
+		types: ["Electric"],
 		inherit: true,
 		baseStats: {hp: 88, atk: 157, def: 75, spa: 147, spd: 80, spe: 153},
 	},
+	heatran: {
+		inherit: true,
+		otherFormes: ["Heatran-Mega"],
+		formeOrder: ["Heatran", "Heatran-Mega"],
+	},
 	heatranmega: {
+		num: 485,
+		name: "Heatran-Mega",
+		types: ["Fire", "Steel"],
 		inherit: true,
 		baseStats: {hp: 91, atk: 120, def: 106, spa: 175, spd: 141, spe: 67},
 	},
