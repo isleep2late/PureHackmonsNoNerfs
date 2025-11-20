@@ -304,6 +304,18 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 	inherit: true,
 	baseStats: {hp: 70, atk: 90, def: 70, spa: 87, spd: 117, spe: 85}, // Atk 60 → 90, SpDef 78 → 117 (Legends ZA)
 	},
+	darkraimega: {
+		inherit: true,
+		baseStats: {hp: 70, atk: 120, def: 130, spa: 165, spd: 130, spe: 85},
+	},
+	zeraoramega: {
+		inherit: true,
+		baseStats: {hp: 88, atk: 157, def: 75, spa: 147, spd: 80, spe: 153},
+	},
+	heatranmega: {
+		inherit: true,
+		baseStats: {hp: 91, atk: 120, def: 106, spa: 175, spd: 141, spe: 67},
+	},
 	
 	// Treasures of Ruin (Pre-Update)
 	chienpao: {
