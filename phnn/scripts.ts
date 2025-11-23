@@ -2,7 +2,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
 	inherit: 'gen9',
 	
-// Will fix Perma-Weather, Terrain Damage Buff, Exclusive Moves/Abilities, and Certain type-interactions later
+// Will fix Perma-Weather, Terrain Damage Buff, Exclusive Moves/Abilities, Certain type-interactions, and Parental Bond later
 	init() {
 	},
 	
