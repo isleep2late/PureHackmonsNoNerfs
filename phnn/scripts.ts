@@ -2,28 +2,11 @@ export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
 	inherit: 'gen9',
 	
+// Will fix Perma-Weather, Terrain Damage Buff, Exclusive Moves/Abilities, and Certain type-interactions later
 	init() {
 	},
 	
 	pokemon: {
-		// Allow any Pokemon to have any ability (remove species restrictions)
-		hasAbility(ability) {
-			if (!ability) return false;
-			if (Array.isArray(ability)) return ability.some(abil => this.hasAbility(abil));
-			const abilityid = this.battle.toID(ability);
-			return this.ability === abilityid;
-		},
-		// Allow signature moves on any Pokemon
-		hasMove(moveid) {
-			moveid = this.battle.toID(moveid);
-			if (!moveid) return false;
-			for (const moveSlot of this.moveSlots) {
-				if (moveid === moveSlot.id) {
-					return moveSlot;
-				}
-			}
-			return false;
-		},
 	},
 	
 	// Battle mechanics modifications
@@ -68,18 +51,6 @@ if (move.id === 'clangoroussoulblaze' && pokemon.hasAbility('parentalbond') && m
     delete move.self;
 }
 		
-		// Remove signature move restrictions
-		if (move.id === 'darkvoid') {
-			// Allow any Pokemon to use Dark Void
-		}
-		if (move.id === 'hyperspacebury') {
-			// Allow any Pokemon to use Hyperspace Fury  
-		}
-		if (move.id === 'aurawheel') {
-			// Allow any Pokemon to use Aura Wheel (default to Electric type)
-			if (!move.type) move.type = 'Electric';
-		}
-		
 		// Multi-hit moves modifications (Gen 1 mechanics)
 		if (['doublekick', 'barrage', 'furyattack', 'pinmissile', 'twineedle', 'cometpunch', 'furyswipes', 'spikecannon'].includes(move.id)) {
 			// Each hit always deals the same damage; subsequent hits will crit if the 1st one did
@@ -120,14 +91,6 @@ if (move.id === 'clangoroussoulblaze' && pokemon.hasAbility('parentalbond') && m
 			move.tracksTarget = true; // Hits during Dig/Fly
 		}
 		
-		// Spore immunity removal
-		if (move.id === 'spore') {
-			// Remove immunity from Grass, Overcoat, and Safety Goggles
-			move.onTryHit = function(target, source, move) {
-				// Remove normal immunities
-				return true;
-			};
-		}
 		
 		// Substitute modifications
 		if (move.id === 'substitute') {
@@ -206,53 +169,8 @@ if (move.id === 'clangoroussoulblaze' && pokemon.hasAbility('parentalbond') && m
 		return this.randomChance(1, critRatios[critRatio] || 24);
 	},
 	
-	// Confusion self-hit rate modification
-	runEvent(eventid, target, source, effect, relayVar, onEffect, fastExit) {
-		if (eventid === 'BeforeMove' && target && target.volatiles['confusion']) {
-			// 33% → 50% confusion self-hit rate
-			const confused = this.randomChance(1, 2); // 50%
-			if (confused) {
-				this.add('-activate', target, 'confusion');
-				const damage = this.actions.getDamage(target, target, {
-					id: 'confused',
-					category: 'Physical',
-					basePower: 40,
-					type: '???',
-				});
-				this.damage(damage, target, target, {id: 'confused'});
-				return false;
-			}
-		}
 		
 		return this.constructor.prototype.runEvent.call(this, eventid, target, source, effect, relayVar, onEffect, fastExit);
-	},
-	
-	// Weather modifications (permanent weather from abilities)
-	field: {
-		setWeather(status, source, sourceEffect, duration) {
-			// If weather is set by certain abilities, make it permanent
-			if (sourceEffect && sourceEffect.id && ['drizzle', 'drought', 'sandstream', 'snowwarning'].includes(sourceEffect.id)) {
-				duration = 0; // Permanent weather
-			}
-			return this.constructor.prototype.setWeather.call(this, status, source, sourceEffect, duration);
-		},
-		
-			// Override terrain effects
-		getTerrainAttackTypeModifier(type) {
-			const terrain = this.terrain;
-			if (!terrain) return;
-			
-			// Restore pre-nerf 50% boosts (instead of current 30%)
-			if (terrain === 'electricterrain' && type === 'Electric') {
-				return 1.5; // Was 1.3 in recent gens
-			}
-			if (terrain === 'grassyterrain' && type === 'Grass') {
-				return 1.5; // Was 1.3 in recent gens
-			}
-			if (terrain === 'psychicterrain' && type === 'Psychic') {
-				return 1.5; // Was 1.3 in recent gens
-			}
-		},
 	},
 	
 	// Psywave damage calculation (Gen 1)
