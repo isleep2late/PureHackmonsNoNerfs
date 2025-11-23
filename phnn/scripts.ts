@@ -3,22 +3,6 @@ export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen9',
 	
 	init() {
-		// Remove EV limits - allow 1512 total EVs
-		this.modData('Pokedex', 'bulbasaur').evLimit = 1512;
-		
-		// Type chart changes: Gen 9 type chart except Psychic is immune from Ghost (Gen 1)
-		this.modData('TypeChart', 'psychic').damageTaken['Ghost'] = 3; // 3 = immune
-		
-		// Enable all battle mechanics (Mega, Z-moves, Dynamax, etc.)
-		for (const id in this.data.Items) {
-			const item = this.data.Items[id];
-			if (item.megaStone) {
-				item.isNonstandard = null;
-			}
-			if (item.zMove || item.zMoveType) {
-				item.isNonstandard = null;
-			}
-		}
 	},
 	
 	pokemon: {
@@ -29,16 +13,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			const abilityid = this.battle.toID(ability);
 			return this.ability === abilityid;
 		},
-		
-		// Modify EV limits
-		setStats(pokemon, stats, source) {
-			if (!pokemon) pokemon = this;
-			// Allow unlimited EVs
-			for (const stat in stats) {
-				pokemon.stats[stat] = stats[stat];
-			}
-		},
-		
 		// Allow signature moves on any Pokemon
 		hasMove(moveid) {
 			moveid = this.battle.toID(moveid);
@@ -54,11 +28,6 @@ export const Scripts: ModdedBattleScriptsData = {
 	
 	// Battle mechanics modifications
 	battle: {
-		// Remove sleep clause
-		checkSleepClause(pokemon, source) {
-			return false; // Always allow sleep
-		},
-		
 		// Leech Seed + Toxic Synergy restoration
 		runEvent(eventid, target, source, effect, relayVar, onEffect, fastExit) {
 			if (eventid === 'ResidualOrder') {
@@ -78,18 +47,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			return this.constructor.prototype.runEvent.call(this, eventid, target, source, effect, relayVar, onEffect, fastExit);
 		},
 	},
-	
 	// Status condition modifications
 	actions: {
-		// Paralysis modifications
-		runStatusHeal(status, pokemon, source, effect) {
-			// Electric types are no longer immune to paralysis
-			if (status === 'par' && pokemon.hasType('Electric')) {
-				// Don't automatically heal
-			}
-			return this.constructor.prototype.runStatusHeal.call(this, status, pokemon, source, effect);
-		},
-		
 		// Speed reduction from paralysis
 		modifyStat(stat, pokemon, source, effect) {
 			if (stat === 'spe' && pokemon.status === 'par') {
