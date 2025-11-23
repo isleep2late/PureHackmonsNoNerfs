@@ -119,6 +119,25 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			this.boost(boost, pokemon, pokemon);
 		}, 
 	},	
+	parentalbond: {
+		// No inherit: true - we're completely overriding to avoid base game's 0.25 modifier
+		onPrepareHit(source, target, move) {
+			if (['iceball', 'rollout'].includes(move.id)) return;
+			if (move.category === 'Status') return;
+			// Allow Z-moves to work with Parental Bond
+			if (move.isZ) {
+				// Z-moves are allowed - continue to make them hit twice
+			} else if (move.selfdestruct || move.multihit) {
+				// Non-Z-moves with these properties are still blocked
+				return;
+			}
+			if (['endeavor', 'fling', 'flail', 'reversal'].includes(move.id)) return;
+			if (move.flags['charge'] || move.flags['recharge'] || move.spreadHit) return;
+			move.multihit = 2;
+			move.multihitType = 'parentalbond';
+		},
+		// Damage modifier (0.5 for second hit) is handled in formats.ts only
+	},	
 	pixilate: {
 		// Restore original 1.3x damage multiplier
 		inherit: true,
