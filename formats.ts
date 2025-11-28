@@ -29,7 +29,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	name: "[Gen 9] Pure Hackmons No Nerfs",
 	desc: "The ultimate Pokemon experience where every move is legal, every ability is legal, and every Pokemon can be played at their peak from their strongest generation.",
 	mod: 'phnn',
-	ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
+	ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Overflow Stat Mod'],
 	banlist: [],
 	unbanlist: [
 		'Past', 'Future', 'Unobtainable'
