@@ -28,6 +28,7 @@
   - [Move Restorations](#move-restorations)
   - [Ability Restorations](#ability-restorations)
   - [Item Restorations](#item-restorations)
+  - [Status Condition Changes](#status-condition-changes)
   - [Mechanics Restorations](#mechanics-restorations)
   - [Format Rules](#format-rules)
 - [Contributors](#contributors)
@@ -49,7 +50,7 @@ Now open your eyes. **Welcome to Pokémon Pure Hackmons: No Nerfs**, the format 
 - **All stats, moves, and abilities function at their peak from their strongest generation**
 - **Signature restrictions are removed** (Dark Void, Permanent Megas, etc.)
 - **All battle mechanics coexist** (Mega-evolutions/Primal, Z-moves, Dynamax/Gigantamax*, Terastallize, and permanent forms of Pokémon such as Ultra-Necrozma, Eternamax, etc.)
-- **Classic broken mechanics return** (Toxic/Leech Seed exploit, Paraconfusion buff, etc.)
+- **Classic broken mechanics return** (Toxic/Leech Seed exploit, Paraconfusion buff, Permafreeze, etc.)
 - **Support for Singles, Doubles, and Triples**
 
 > *Note: As of now, the use of Dynamax/Gigantamax is NOT supported on Pokémon Showdown in Gen 9 alongside Terastallize. Additionally, Mega-Evolving/Ultra-Necrozma'ing will NOT allow one to additionally Terastallize afterwards. It's kind of one-or-the-other. However, in an "ideal" PHNN format, this would all be possible.
@@ -105,15 +106,30 @@ You can edit your `config/formats.ts` file to include the additional "No Nerfs" 
 
 ```typescript
 {
-    section: "Example Format",
-    column: 3,
+    section: "No Nerfs Formats",
 },
 {
     name: "[Gen 9] Pure Hackmons No Nerfs",
-    mod: 'pure-hackmons-no-nerfs',
-    ruleset: ['Standard', 'Overflow Stat Mod', '!Obtainable'],
-    banlist: ['Endure + Custap Berry'],
-    unbanlist: ['All Pokemon', 'All Abilities', 'All Moves', 'All Items'],
+    desc: "The ultimate Pokemon experience where every move is legal, every ability is legal, and every Pokemon can be played at their peak from their strongest generation.",
+    mod: 'phnn',
+    ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
+    banlist: [],
+    unbanlist: ['Past', 'Future', 'Unobtainable'],
+    onValidateSet(set, format, setHas, teamHas) {
+        return [];
+    },
+    onValidateTeam(team, format) {
+        return [];
+    },
+    onBegin() {
+        for (const side of this.sides) {
+            side.canMegaEvo = true;
+            side.canUltraBurst = true; 
+            side.canDynamax = true;
+            side.canZMove = true;
+            side.canTerastallize = true;
+        }
+    },
 }
 ```
 
@@ -382,14 +398,87 @@ The Gen 1 Special stat was split into Special Attack and Special Defense in Gen 
 - **Tackle/Feint**: → 50 BP
 - **Absorb**: → 40 BP
 - **Self-Destruct/Explosion**: Cause opposing defenses to be halved
-- **Hidden Power**: Back to variable BP based on IVs
+- **Hidden Power**: Back to variable BP based on IVs (30-70)
 
 #### Accuracy Buffs
 
-- **Hypnosis**: → 70%
-- **Dark Void**: → 80%
-- **Will-O-Wisp**: → 85%
-- **Thunder/Blizzard/Hurricane**: → 70%
+**Traditional Accuracy Nerfs Reversed**
+- **Hypnosis**: 60 → 70%
+- **Dark Void**: 50 → 80%
+- **Swagger**: 85 → 90%
+- **Will-O-Wisp**: 85 → 100%
+- **Thunder Wave**: 90 → 100%
+- **Bide**: Never misses
+- **Memento**: Never misses
+- **Nightmare**: Never misses
+
+> *Note: Legends Z-A introduced 100% accuracy for many moves in its real-time combat system. However, these accuracy buffs have been intentionally **excluded** from this mod (except for Will-O-Wisp) to maintain competitive balance. Thunder, Blizzard, Hurricane, Focus Blast, and other moves retain their standard accuracies.*
+
+#### PP Restorations
+
+<details>
+<summary><b>Click to view all PP restorations</b></summary>
+
+**40 PP**
+- Acid Armor (20 → 40)
+- Covet (25 → 40)
+- Growth (20 → 40)
+
+**30 PP**
+- Barrier (20 → 30)
+- Extrasensory (20 → 30)
+- Swords Dance (20 → 30)
+- Tailwind (15 → 30)
+
+**25 PP**
+- Jump Kick (10 → 25)
+- Submission (20 → 25)
+
+**20 PP**
+- Recover (10 → 20)
+- Hi Jump Kick (10 → 20)
+- Petal Dance (10 → 20)
+- Thrash (10 → 20)
+- Air Slash (15 → 20)
+- Minimize (10 → 20)
+- Sacred Sword (15 → 20)
+
+**15 PP**
+- Future Sight (10 → 15)
+- Outrage (10 → 15)
+- Synchronoise (10 → 15)
+- Barb Barrage (10 → 15)
+- Bitter Malice (10 → 15)
+- Triple Arrows (10 → 15)
+
+**10 PP**
+- Lunar Blessing (5 → 10)
+- Milk Drink (5 → 10)
+- Rest (5 → 10)
+- Roost (5 → 10)
+- Shore Up (5 → 10)
+- Slack Off (5 → 10)
+- Soft-Boiled (5 → 10)
+
+</details>
+
+#### Secondary Effect Changes (Gen 1 Mechanics)
+
+<details>
+<summary><b>View all secondary effect changes</b></summary>
+
+- **Psychic**: 33.2% chance to lower Special Attack AND Special Defense (was 10% SpDef only)
+- **Blizzard**: 30% chance to freeze (was 10%)
+- **Fire Blast**: 30% chance to burn (was 10%)
+- **Sludge**: 40% chance to poison (was 30%)
+- **Acid**: 33.2% chance to lower Defense (was 10%)
+- **Aurora Beam**: 33.2% chance to lower Attack (was 10%)
+- **Bubble**: 33.2% chance to lower Speed (was 10%)
+- **Bubble Beam**: 33.2% chance to lower Speed (was 10%)
+- **Constrict**: 33.2% chance to lower Speed (was 10%)
+- **Razor Wind**: Increased crit ratio
+
+</details>
 
 #### Special Mechanics & Effects
 
@@ -420,9 +509,9 @@ The Gen 1 Special stat was split into Special Attack and Special Defense in Gen 
 
 #### Priority Changes
 
-- **Roar/Whirlwind**: → -1
-- **Follow Me**: → +3
-- **Rage Powder**: → +3
+- **Roar/Whirlwind**: -6 → -1
+- **Follow Me**: +2 → +3
+- **Rage Powder**: +2 → +3
 
 #### Removed Moves Returned
 
@@ -532,17 +621,18 @@ All signature Z-moves are back:
 
 #### Classic Items Return
 
-1. **Berserk Gene**
-   - Effect: Immediately raises Attack by 2 stages and inflicts confusion
+1. **Berserk Gene** 🧬
+   - Effect: Immediately raises Attack by 2 stages and inflicts confusion on switch-in
    - Consumable item that activates upon entering battle
    - Associated with Mewtwo lore from Cerulean Cave experiments
+   - Originally from Generation 2
 
 2. **Pink Bow/Polkadot Bow**
    - Effect: Boosts Normal-type moves by 10%
    - Item redundancy relevant if Item Clause is ever enforced
 
 3. **Soul Dew**
-   - Boosts Latios/Latias's SpAtk and SpDef by 50%
+   - Boosts Latios/Latias's SpAtk and SpDef by 50% (Pre-Gen 7 mechanics)
 
 4. **Additional Items**
    - Z-Crystals
@@ -551,21 +641,41 @@ All signature Z-moves are back:
 
 ---
 
+### Status Condition Changes
+
+#### Burn
+- Deals **1/8 max HP** per turn as residual damage
+- *Note: This may differ from current generation mechanics depending on when you are reading this*
+
+#### Paralysis
+- Reduces Speed by **75%** (to 25% of original)
+- **25% chance** to be fully paralyzed each turn (unless you have Magic Guard)
+- Electric-types are **no longer immune** to paralysis
+
+#### Confusion
+- **50% self-hit rate** (increased from 33%)
+- Self-damage uses 40 BP typeless attack
+
+#### Freeze (Permafreeze)
+- Frozen Pokémon **stay frozen indefinitely** until thawed by an external mechanic
+- **No random thaw chance** - must be thawed by:
+  - Being hit by a Fire-type move
+  - Using a move with the "defrost" flag (Flame Wheel, Sacred Fire, Scald, etc.)
+  - Abilities that cure status (Natural Cure on switch, etc.)
+  - Items that cure status (Lum Berry, etc.)
+- This restores the brutal Gen 1-style freeze mechanic! ❄️
+
+#### Weather Duration
+- Weather set by abilities (Drizzle, Drought, Sand Stream, Snow Warning) is **permanent**
+- Weather set by moves still has standard duration
+
+---
+
 ### Mechanics Restorations
 
 #### Critical Hit Formula
 
 Restore speed-based critical hits (high-speed = more crits)
-
-#### 655 Stat 'Glitch' / E-max "0 Def" Overflow
-
-[See Smogon discussion](https://www.smogon.com/forums/threads/655-stat-glitch-and-its-place-in-tiering.3672135/)
-
-#### Status Condition Mechanics
-
-- **Leech Seed + Toxic Synergy**: Restore the stacking interaction where Toxic's increasing damage applies to Leech Seed as well
-- **Paralysis**: Reduces speed by 75%; Electric types no longer immune
-- **Confusion Self-Hit Rate**: 33% → 50%
 
 #### Type Chart Changes
 
@@ -606,7 +716,8 @@ Pure Hackmons No Nerfs creates the ultimate Pokémon experience, restoring broke
 ✅ **Ability nerfs** are removed  
 ✅ **Classic items** like GSC's Berserk Gene return  
 ✅ **Every battle mechanic** from Gens 1-9 all come together  
-✅ **Powerful permanent forms** like E-max, Megas, etc. come back
+✅ **Powerful permanent forms** like E-max, Megas, etc. come back  
+✅ **Permafreeze** restores the terrifying Gen 1 freeze mechanic
 
 This format not only brings forth an interesting metagame but also attempts to capture some of the most powerful things in Pokémon history. Moving forward, one could consider expanding on the phrase "no nerfs" to apply to other formats as well, including:
 - **"OU No Nerfs"** where Machamp can learn Fissure with No Guard
