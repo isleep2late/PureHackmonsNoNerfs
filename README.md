@@ -112,7 +112,7 @@ You can edit your `config/formats.ts` file to include the additional "No Nerfs" 
     name: "[Gen 9] Pure Hackmons No Nerfs",
     desc: "The ultimate Pokemon experience where every move is legal, every ability is legal, and every Pokemon can be played at their peak from their strongest generation.",
     mod: 'phnn',
-    ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
+    ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Overflow Stat Mod'],
     banlist: [],
     unbanlist: ['Past', 'Future', 'Unobtainable'],
     onValidateSet(set, format, setHas, teamHas) {
@@ -406,7 +406,7 @@ The Gen 1 Special stat was split into Special Attack and Special Defense in Gen 
 - **Hypnosis**: 60 → 70%
 - **Dark Void**: 50 → 80%
 - **Swagger**: 85 → 90%
-- **Will-O-Wisp**: 85 → 100%
+- **Will-O-Wisp**: 85 → 100% (Only Z-A accuracy buff we are implementing based on community feedback)
 - **Thunder Wave**: 90 → 100%
 - **Bide**: Never misses
 - **Memento**: Never misses
@@ -679,7 +679,10 @@ Restore speed-based critical hits (high-speed = more crits)
 
 #### Type Chart Changes
 
-Gen 9 type chart except **Psychic is immune to Ghost** (Gen 1)
+Gen 9 type chart except:
+- **Psychic is immune to Ghost** (Gen 1)
+- **Steel resists Ghost/Dark** (Gen 2)
+- **Bug and Poison are weak to each other** (Gen 1)
 
 #### Terrain Buffs
 
@@ -704,6 +707,7 @@ Gen 9 type chart except **Psychic is immune to Ghost** (Gen 1)
 - **Species Clause**: No restrictions (can use multiple of same Pokémon)
 - **Sleep Clause**: Removed
 - **Endless Battle Clause**: Standard rules apply
+- **Stat Overflow**: Removed (More on this in Additional Information)
 
 ---
 
@@ -734,6 +738,8 @@ This format not only brings forth an interesting metagame but also attempts to c
 - **Enigmatist** - Contributor  
 - **Alex BB** - Contributor
 
+## [**Join our Discord**](https://discord.gg/mTwgNNtE6a)
+
 **Special Thanks:**
 - Pure Hackmons community for additional feedback
 - Pokémon Showdown for making this possible (via Custom Format/Local Open-Source modification)
@@ -749,6 +755,33 @@ This document is subject to constant updates/changes, especially as new games/ge
 ### Future Possibilities
 
 **EXPERIMENTAL**: Shadow Lugia/Shadow moves, "busted" moves from Pokémon Masters (Feel Our Feelings!, Lunar Moongeist Beam, Dawn Lunar Eclipse Moongeist Beam, etc.) might be fun ideas; however, they may be impractical and are also NOT implemented in Pokémon Showdown yet. Additionally, there is a Save Editing-related Pure Hackmons mechanic in Gen 1 that is NOT implemented on Showdown where a Pokemon's sprite and typing can be modified (see https://www.smogon.com/forums/threads/old-gen-hackmons-megathread.3649618/post-10398287 as well as https://projectpokemon.org/home/forums/topic/67301-i-think-i-ran-into-new-color-palettes-shiny-sprites-in-pokemon-yellow-using-save-editing/ ... this is all possible using Pikasav which can be found here: https://projectpokemon.org/home/files/file/1598-pikasav/). While this would be really cool and would apply to all Gen 1 Pokemon, it is currently impossible to code and would not be feasible on Showdown, but could be a good theoretical framework for the future).
+
+### Final Comments About Design Philosophy (and the decision to remove Stat Overflow Glitch)
+
+The decision to remove Stat Overflow was not an easy one, but is something worth bringing up. The reason behind banning this particular mechanic is two-fold, and will serve as the basis for future decisions:
+
+1) Balance: PHNN by virtue of what it is, is by definition not a very balanced format. That said, there are only a handful of things that make it so, and Emax's overflow glitch is one of them. We must therefore distinguish PHNN on several levels:
+
+- "Theorymon" No Nerfs: This could be anything from allowing Shadow Moves to straight up removing "Cleric" Clause (this is a thing in RBY where Pokemon can enter battle pre-statused for Spore immunity). These are things that, on paper, can conceivably exist, but in practicality, would be very difficult, almost impossible to implement, both from a programming aspect with respect to Showdown as well as from a logistical standpoint..
+
+- "Tournament-Ready" No Nerfs: This is the direction I think this should go, because a format is ultimately as popular as its playerbase, and players aren't going to exist if they don't enjoy the format they are interacting with.
+
+- "Casual" No Nerfs: This is a third level people don't really talk about, but is basically the reason I have leftovers-again implemented on my server. This is where you play Battle Tower in a console game and you just face NPC's and have fun at your own personal level. You probably play Double-Iron Bash more often than you play Sunsteel Strike here (or Astral Barrage > Moongeist Beam) because you're more interested in hitting hard rather than metagaming Wonder Guard.
+
+At the Tournament-Ready level, we ought to respect balance. But does that really go against the spirit of the format? Ultimately, I would argue no, and the reason is because of what I like to refer to as the "No Nerfs Paradox" which states: 'When something becomes abusable, it acts like a nerf to everything else.'
+We can reasonably remove or change things around the way we want because, ultimately, one could argue that removing Stat Overflow removes the "nerf" on all Huge Power / Pure Power pokemon. With that said, there is the second reason which we've touched on already...
+
+2) Community Feedback / Interest: PHNN is largely community-driven, and if a group of people collectively want something that is in the best interest of the community, it would make sense to simply go with the flow.
+
+As an example, this is also the reason why, at this moment, we are allowing Will-O-Wisp to stay at 100% accuracy. It is a feature in Legends Z-A that most if not all moves are 100% accurate. The argument against allowing all ZA moves to be 100% accurate is that it is for a completely non-turn based system.
+
+So why Will-O-Wisp, and why now? We actually put this to a vote, and while we will continue to vote on things in our Discord, the idea was that there's a 100% accurate status move for paralysis, sleep, and poison, so why isn't there one for burn?
+
+It might be inconsistent or arbitrary for us to only serve Will-O-Wisp, but ultimately this was interesting enough of an idea for the community that we're trying it out. It's the same notion for Overflow. We put Emax to a vote, and most everyone unanimously wanted Overflow banned but it was OK to keep Emax, even though Dynamaxed Pokemon is not something that is easy to implement in Gen 9.
+
+Other things we are exploring are the G-max moves in Gen 8. The only reason these have not been implemented yet is because, quite frankly it would be a lot to really think about, they are very powerful moves, and we are still experimenting with what works and what doesn't work. For simplicity's sake, we have not set parameters on G-moves to 160 BP, but that is certainly something that is open for discussion in future updates.
+
+Another comment about design philosophy: We are not against the idea of implementing Glitches. There are several Glitchmons such as MissingNo. or glitch moves or items that we could definitely consider. Stat Overflow is an unintended glitch that was never meant to happen, but glitches are fair game, though they are still relegated to Theorymon-level PHNN due to practicality.
 
 ---
 
