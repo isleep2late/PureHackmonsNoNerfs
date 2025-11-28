@@ -2,8 +2,68 @@ export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
 	inherit: 'gen9',
 	
+	init() {
+		// Remove EV limits - allow 1512 total EVs
+		this.modData('Pokedex', 'bulbasaur').evLimit = 1512;
+		
+		// Type chart changes: Gen 9 type chart except Psychic is immune from Ghost (Gen 1)
+		this.modData('TypeChart', 'psychic').damageTaken['Ghost'] = 3; // 3 = immune
+		
+		// Enable all battle mechanics (Mega, Z-moves, Dynamax, etc.)
+		for (const id in this.data.Items) {
+			const item = this.data.Items[id];
+			if (item.megaStone) {
+				item.isNonstandard = null;
+			}
+			if (item.zMove || item.zMoveType) {
+				item.isNonstandard = null;
+			}
+		}
+		
+		// Enable Berserk Gene
+		if (this.data.Items['berserkgene']) {
+			this.data.Items['berserkgene'].isNonstandard = null;
+		}
+	},
+	
+	pokemon: {
+		// Allow any Pokemon to have any ability (remove species restrictions)
+		hasAbility(ability) {
+			if (!ability) return false;
+			if (Array.isArray(ability)) return ability.some(abil => this.hasAbility(abil));
+			const abilityid = this.battle.toID(ability);
+			return this.ability === abilityid;
+		},
+		
+		// Modify EV limits
+		setStats(pokemon, stats, source) {
+			if (!pokemon) pokemon = this;
+			// Allow unlimited EVs
+			for (const stat in stats) {
+				pokemon.stats[stat] = stats[stat];
+			}
+		},
+		
+		// Allow signature moves on any Pokemon
+		hasMove(moveid) {
+			moveid = this.battle.toID(moveid);
+			if (!moveid) return false;
+			for (const moveSlot of this.moveSlots) {
+				if (moveid === moveSlot.id) {
+					return moveSlot;
+				}
+			}
+			return false;
+		},
+	},
+	
 	// Battle mechanics modifications
 	battle: {
+		// Remove sleep clause
+		checkSleepClause(pokemon, source) {
+			return false; // Always allow sleep
+		},
+		
 		// Leech Seed + Toxic Synergy restoration
 		runEvent(eventid, target, source, effect, relayVar, onEffect, fastExit) {
 			if (eventid === 'ResidualOrder') {
@@ -26,6 +86,24 @@ export const Scripts: ModdedBattleScriptsData = {
 	
 	// Status condition modifications
 	actions: {
+		// Paralysis modifications
+		runStatusHeal(status, pokemon, source, effect) {
+			// Electric types are no longer immune to paralysis
+			if (status === 'par' && pokemon.hasType('Electric')) {
+				// Don't automatically heal
+			}
+			return this.constructor.prototype.runStatusHeal.call(this, status, pokemon, source, effect);
+		},
+		
+		// Speed reduction from paralysis
+		modifyStat(stat, pokemon, source, effect) {
+			if (stat === 'spe' && pokemon.status === 'par') {
+				return this.chainModify(0.25); // 75% speed reduction
+			}
+			return this.constructor.prototype.modifyStat.call(this, stat, pokemon, source, effect);
+		},
+		
+		// Parental Bond damage modifier (from new file)
 		modifyDamage(
 			baseDamage: number, pokemon: Pokemon, target: Pokemon, move: ActiveMove, suppressMessages = false
 		) {
@@ -41,7 +119,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.debug(`Spread modifier: ${spreadModifier}`);
 				baseDamage = this.battle.modify(baseDamage, spreadModifier);
 			} else if (move.multihitType === 'parentalbond' && move.hit > 1) {
-				// Parental Bond modifier
+				// Parental Bond modifier - 50% on second hit (Pre-Gen 7)
 				const bondModifier = 0.5;
 				this.battle.debug(`Parental Bond modifier: ${bondModifier}`);
 				baseDamage = this.battle.modify(baseDamage, bondModifier);
@@ -141,7 +219,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// ...but 16-bit truncation happens even later, and can truncate to 0
 			return tr(baseDamage, 16);
 		},
-	}, // <-- THIS CLOSING BRACE WAS MISSING
+	},
 	
 	// Move modifications
 	runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect, zMove, externalMove, maxMove, originalTarget) {
@@ -151,6 +229,18 @@ export const Scripts: ModdedBattleScriptsData = {
 		// Remove default self-effect so custom onAfterMove can handle it twice
 		if (move.id === 'clangoroussoulblaze' && pokemon.hasAbility('parentalbond') && move.multihitType === 'parentalbond') {
 			delete move.self;
+		}
+		
+		// Remove signature move restrictions
+		if (move.id === 'darkvoid') {
+			// Allow any Pokemon to use Dark Void
+		}
+		if (move.id === 'hyperspacebury') {
+			// Allow any Pokemon to use Hyperspace Fury  
+		}
+		if (move.id === 'aurawheel') {
+			// Allow any Pokemon to use Aura Wheel (default to Electric type)
+			if (!move.type) move.type = 'Electric';
 		}
 		
 		// Multi-hit moves modifications (Gen 1 mechanics)
@@ -193,6 +283,19 @@ export const Scripts: ModdedBattleScriptsData = {
 			move.tracksTarget = true; // Hits during Dig/Fly
 		}
 		
+		// Spore immunity removal
+		if (move.id === 'spore') {
+			// Remove immunity from Grass, Overcoat, and Safety Goggles
+			move.onTryHit = function(target, source, move) {
+				// Remove normal immunities
+				return true;
+			};
+		}
+		
+		// Defog - Can lower evasion through Substitute (Gen 6 behavior)
+		if (move.id === 'defog') {
+			move.infiltrates = true; // Allows it to bypass Substitute for evasion drop
+		}
 		
 		// Substitute modifications
 		if (move.id === 'substitute') {
@@ -269,6 +372,55 @@ export const Scripts: ModdedBattleScriptsData = {
 		const critRatio = Math.min(critRatios.length - 1, Math.floor(critChance));
 		
 		return this.randomChance(1, critRatios[critRatio] || 24);
+	},
+	
+	// Confusion self-hit rate modification
+	runEvent(eventid, target, source, effect, relayVar, onEffect, fastExit) {
+		if (eventid === 'BeforeMove' && target && target.volatiles['confusion']) {
+			// 33% → 50% confusion self-hit rate
+			const confused = this.randomChance(1, 2); // 50%
+			if (confused) {
+				this.add('-activate', target, 'confusion');
+				const damage = this.actions.getDamage(target, target, {
+					id: 'confused',
+					category: 'Physical',
+					basePower: 40,
+					type: '???',
+				});
+				this.damage(damage, target, target, {id: 'confused'});
+				return false;
+			}
+		}
+		
+		return this.constructor.prototype.runEvent.call(this, eventid, target, source, effect, relayVar, onEffect, fastExit);
+	},
+	
+	// Weather modifications (permanent weather from abilities)
+	field: {
+		setWeather(status, source, sourceEffect, duration) {
+			// If weather is set by certain abilities, make it permanent
+			if (sourceEffect && sourceEffect.id && ['drizzle', 'drought', 'sandstream', 'snowwarning'].includes(sourceEffect.id)) {
+				duration = 0; // Permanent weather
+			}
+			return this.constructor.prototype.setWeather.call(this, status, source, sourceEffect, duration);
+		},
+		
+		// Override terrain effects
+		getTerrainAttackTypeModifier(type) {
+			const terrain = this.terrain;
+			if (!terrain) return;
+			
+			// Restore pre-nerf 50% boosts (instead of current 30%)
+			if (terrain === 'electricterrain' && type === 'Electric') {
+				return 1.5; // Was 1.3 in recent gens
+			}
+			if (terrain === 'grassyterrain' && type === 'Grass') {
+				return 1.5; // Was 1.3 in recent gens
+			}
+			if (terrain === 'psychicterrain' && type === 'Psychic') {
+				return 1.5; // Was 1.3 in recent gens
+			}
+		},
 	},
 	
 	// Psywave damage calculation (Gen 1)
