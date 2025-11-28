@@ -235,14 +235,14 @@ export const TypeChart: import('../../../sim/dex-data').ModdedTypeDataTable = {
 			tox: 3,
 			sandstorm: 3,
 			Bug: 2,
-			Dark: 0,
+			Dark: 2, // Changed from 0 to 2 - Steel now resists Dark
 			Dragon: 2,
 			Electric: 0,
 			Fairy: 2,
 			Fighting: 1,
 			Fire: 1,
 			Flying: 2,
-			Ghost: 0,
+			Ghost: 2, // Changed from 0 to 2 - Steel now resists Ghost
 			Grass: 2,
 			Ground: 1,
 			Ice: 2,
