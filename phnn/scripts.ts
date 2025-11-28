@@ -23,6 +23,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			return this.constructor.prototype.runEvent.call(this, eventid, target, source, effect, relayVar, onEffect, fastExit);
 		},
 	},
+	
 	// Status condition modifications
 	actions: {
 		modifyDamage(
@@ -139,24 +140,18 @@ export const Scripts: ModdedBattleScriptsData = {
 	
 			// ...but 16-bit truncation happens even later, and can truncate to 0
 			return tr(baseDamage, 16);
-		}
-	
-		/**
-		 * Confusion damage is unique - most typical modifiers that get run when calculating
-		 * damage (e.g. Huge Power, Life Orb, critical hits) don't apply. It also uses a 16-bit
-		 * context for its damage, unlike the regular damage formula (though this only comes up
-		 * for base damage).
-		 */
+		},
+	}, // <-- THIS CLOSING BRACE WAS MISSING
 	
 	// Move modifications
 	runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect, zMove, externalMove, maxMove, originalTarget) {
 		const move = this.dex.getActiveMove(moveOrMoveName);
 
-// Handle Clangorous Soulblaze with Parental Bond
-// Remove default self-effect so custom onAfterMove can handle it twice
-if (move.id === 'clangoroussoulblaze' && pokemon.hasAbility('parentalbond') && move.multihitType === 'parentalbond') {
-    delete move.self;
-}
+		// Handle Clangorous Soulblaze with Parental Bond
+		// Remove default self-effect so custom onAfterMove can handle it twice
+		if (move.id === 'clangoroussoulblaze' && pokemon.hasAbility('parentalbond') && move.multihitType === 'parentalbond') {
+			delete move.self;
+		}
 		
 		// Multi-hit moves modifications (Gen 1 mechanics)
 		if (['doublekick', 'barrage', 'furyattack', 'pinmissile', 'twineedle', 'cometpunch', 'furyswipes', 'spikecannon'].includes(move.id)) {
@@ -274,10 +269,6 @@ if (move.id === 'clangoroussoulblaze' && pokemon.hasAbility('parentalbond') && m
 		const critRatio = Math.min(critRatios.length - 1, Math.floor(critChance));
 		
 		return this.randomChance(1, critRatios[critRatio] || 24);
-	},
-	
-		
-		return this.constructor.prototype.runEvent.call(this, eventid, target, source, effect, relayVar, onEffect, fastExit);
 	},
 	
 	// Psywave damage calculation (Gen 1)
